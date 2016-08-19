@@ -1,5 +1,5 @@
 # bitsandpieces
-Bits and pieces of useful code
+Bits and pieces of useful code.
 
 The best way to figure out what is really here is to browse through the folder structure.
 
