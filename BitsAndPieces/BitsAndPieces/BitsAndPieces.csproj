@@ -28,6 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Interfaces\SharePointJSOM\ISharePointJsomErrorResponse.ts" />
+    <TypeScriptCompile Include="MMS\MMSService.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">
