@@ -1,16 +1,15 @@
-﻿module JJ.BusinessPanorama.Common.Services {
+﻿module Nivlag.Services {
 
     'use strict';
 
-    import interfaces = JJ.BusinessPanorama.Interfaces;
-    import commonServices = JJ.BusinessPanorama.Common.Services;
+    import interfaces = Nivlag.Interfaces;
     
-    var serviceId = "JJ.BusinessPanorama.Common.Services.MMSService";
+    var serviceId = "Nivlag.Services.MMSService";
 
-    interface IPanoramaTerm {
+    interface ITerm {
         termName: string;
         SPTerm: SP.Taxonomy.Term;
-        childTerms: IPanoramaTerm[];
+        childTerms: ITerm[];
     }
 
     export class MMSService {
@@ -21,25 +20,25 @@
 
         private SPContext: SP.ClientContext;
 
-        public AllPanoramaTerms: IPanoramaTerm[];
+        public AllTerms: ITerm[];
 
         // Get our dependencies in order.
         static $inject = [
             "$q",
             "$log",
             "$http",
-            "JJ.BusinessPanorama.Common.Services.sharepointrestconnection"
+            "Nivlag.Services.sharepointrestconnection"
         ];
 
         constructor(
             private $q: ng.IQService,
             private $log: ng.ILogService,
             private $http: ng.IHttpService,
-            private spRestUtil: commonServices.SharePointRestConnection
+            private spRestUtil: Nivlag.Services.SharePointUtilityService
         )
         {
 
-            this.AllPanoramaTerms = [];
+            this.AllTerms = [];
 
             this.$log.debug("MMSService(): constructor: entering.");
 
@@ -53,26 +52,18 @@
 
                         this.SPContext = SP.ClientContext.get_current();
 
-                        this.GetAllPanoramaTerms().then(
-                            () => {
-                                this.$log.debug("MMSService: constructor: retrieved all terms:", this.AllPanoramaTerms);
-                            },
-                            () => {
-                                this.$log.error("MMSService: constructor: failed to retrieve all terms, maybe some?:", this.AllPanoramaTerms);
-                            }
-                        );
                     });
                 });
             });
 
         }
 
-        public GetAllPanoramaTerms(): ng.IPromise<IPanoramaTerm[]>{
+        public GetAllTermsForTermGroup(termGroupName: string): ng.IPromise<ITerm[]>{
 
-            let deferred = this.$q.defer<IPanoramaTerm[]>();
+            let deferred = this.$q.defer<ITerm[]>();
 
-            this._loadParentTerms("Business Panorama").then(
-                (parentTerms: IPanoramaTerm[]) => {
+            this._loadParentTerms(termGroupName).then(
+                (parentTerms: ITerm[]) => {
 
                     let allMmsRequests: ng.IPromise<any>[] = [];
 
@@ -84,11 +75,11 @@
 
                     this.$q.all(allMmsRequests).then(
                         () => {
-                            this.$log.debug("MMSSErvice.ts: GetAllPanoramaTerms(): Successfully resolved all the promises.");
-                            deferred.resolve(this.AllPanoramaTerms);
+                            this.$log.debug("MMSService.ts: GetAllPanoramaTerms(): Successfully resolved all the promises.");
+                            deferred.resolve(this.AllTerms);
                         },
                         () => {
-                            this.$log.error("MMSSErvice.ts: GetAllPanoramaTerms(): Failed at least one of othe MMS promises.");
+                            this.$log.error("MMSService.ts: GetAllPanoramaTerms(): Failed at least one of othe MMS promises.");
                         });
 
                 });
@@ -97,11 +88,11 @@
 
         }
 
-        private _loadParentTerms(forTermSetLabel: string): ng.IPromise<IPanoramaTerm[]> {
+        private _loadParentTerms(forTermSetLabel: string): ng.IPromise<ITerm[]> {
 
             this.$log.debug("MMSService: _loadParentTerms(): Searching for terms in termset:", forTermSetLabel);
 
-            let deferred = this.$q.defer<IPanoramaTerm[]>();
+            let deferred = this.$q.defer<ITerm[]>();
 
             var context = new SP.ClientContext(_spPageContextInfo.siteServerRelativeUrl);
             this.SPContext = context;
@@ -123,9 +114,7 @@
 
                     const parentTerms = terms.get_data().map((aTerm) => {
 
-                        //this.getTermsForTermSet(item);
-
-                        return <IPanoramaTerm>{
+                        return <ITerm>{
                             childTerms: [],
                             termName: aTerm.get_name(),
                             SPTerm: aTerm
@@ -145,11 +134,11 @@
 
         }
 
-        private _insertChildTermsForParentTermSet(parentTerm: IPanoramaTerm): ng.IPromise<IPanoramaTerm[]> {
+        private _insertChildTermsForParentTermSet(parentTerm: ITerm): ng.IPromise<ITerm[]> {
 
             this.$log.debug("MMSService: getTermsForTermSet: getting terms for a parent:", parentTerm);
 
-            let deferred = this.$q.defer<IPanoramaTerm[]>();
+            let deferred = this.$q.defer<ITerm[]>();
 
             let termsToLoad = parentTerm.SPTerm.get_terms();
 
@@ -158,19 +147,16 @@
             this.SPContext.executeQueryAsync(
                 () => {
 
-                    //this.$log.debug("MMSService: getTermsForTermSet: got some terms:",
-                    //    termsToLoad.get_data().map((item) => { return item.get_name() })); 
-
                     parentTerm.childTerms = termsToLoad.get_data().map(
                         (aTerm) => {
-                            return <IPanoramaTerm>{
+                            return <ITerm>{
                                 childTerms: [],
                                 SPTerm: aTerm,
                                 termName: aTerm.get_name()
                             };
                         });
 
-                    this.AllPanoramaTerms = this.AllPanoramaTerms.concat(parentTerm);
+                    this.AllTerms = this.AllTerms.concat(parentTerm);
 
                     // Since this is actually pushing the terms into the parentTerm array, not really need to return the child terms, but just for debugging.
                     deferred.resolve(parentTerm.childTerms); 
@@ -195,7 +181,7 @@
     }
 
     angular
-        .module('panoramaApp')
+        .module('nivlag')
         .service(serviceId, MMSService);
 
 }

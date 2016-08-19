@@ -1,4 +1,4 @@
-﻿module JJ.BusinessPanorama.Interfaces {
+﻿module Nivlag.Interfaces {
 
     export interface ISharePointJsomErrorResponse {
         msg: string;

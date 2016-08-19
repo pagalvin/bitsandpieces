@@ -24,12 +24,19 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="index.html" />
+    <Content Include="UploadBinaryDataToSharePoint\ImageUploadTestDirectiveView.html" />
+    <Content Include="UploadBinaryDataToSharePoint\UploadTestPage.html" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="Interfaces\SharePointJSOM\ISharePointJsomErrorResponse.ts" />
     <TypeScriptCompile Include="MMS\MMSService.ts" />
+    <TypeScriptCompile Include="REST\SharePointRestUtilityService.ts" />
+    <TypeScriptCompile Include="UploadBinaryDataToSharePoint\IBinaryFileUploadService.ts" />
+    <TypeScriptCompile Include="UploadBinaryDataToSharePoint\BinaryFileUploadService.ts" />
+    <TypeScriptCompile Include="UploadBinaryDataToSharePoint\ImageUploadTestController.ts" />
+    <TypeScriptCompile Include="UploadBinaryDataToSharePoint\ImageUploadTestDirective.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">
