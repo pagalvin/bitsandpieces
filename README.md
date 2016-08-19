@@ -11,3 +11,8 @@ You'll need to make sure that whatever project you use for this has the various 
 - SharePoint typings
 - Typings for moment, etc.
 
+# Whats in it?
+- SharePoint REST Utility service (h/t Hunter P): the main value here is that it gets your digest stuff sorted out for you and does it on a timer, so that all your rest calls (when wrapped inside it) work as expected with SharePoint.
+- MMSService: This is not fully baked, but for a given term group, it will find all the first level terms and then all of the 2nd level terms. So for instance, if you have a group called "xyzzy" and two term sets under it, "Country" and "Region", it will get Country and its children as well as Region and its children. If country or region have sub-terms themselves, it does not retrieve those.
+- An interface defining a useful data structure for when your JSOM calls error out.
+- 
