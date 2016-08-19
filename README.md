@@ -15,4 +15,6 @@ You'll need to make sure that whatever project you use for this has the various 
 - SharePoint REST Utility service (h/t Hunter P): the main value here is that it gets your digest stuff sorted out for you and does it on a timer, so that all your rest calls (when wrapped inside it) work as expected with SharePoint.
 - MMSService: This is not fully baked, but for a given term group, it will find all the first level terms and then all of the 2nd level terms. So for instance, if you have a group called "xyzzy" and two term sets under it, "Country" and "Region", it will get Country and its children as well as Region and its children. If country or region have sub-terms themselves, it does not retrieve those.
 - An interface defining a useful data structure for when your JSOM calls error out.
-- 
+- BinaryFileUploadService: Used for a client project to upload an image to a folder in a sharepoint document library. This is not fully baked as of 8/19, but it does take a binary file (like an image) and upload it. The name and paths are currently all hard coded.
+
+
