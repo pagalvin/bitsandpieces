@@ -106,7 +106,7 @@ var Nivlag;
                 "$q",
                 "$log",
                 "$http",
-                "Nivlag.Services.sharepointrestconnection"
+                "Nivlag.Services.SharePointUtilityService"
             ];
             return MMSService;
         }());

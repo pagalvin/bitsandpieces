@@ -27,7 +27,7 @@
             "$q",
             "$log",
             "$http",
-            "Nivlag.Services.sharepointrestconnection"
+            "Nivlag.Services.SharePointUtilityService"
         ];
 
         constructor(

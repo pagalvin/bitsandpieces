@@ -23,6 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="BinarySearchWithGenerics\BinSearchBootstrap.html" />
+    <Content Include="BinarySearchWithGenerics\BinSearchDirectiveView.html" />
     <Content Include="index.html" />
     <Content Include="UploadBinaryDataToSharePoint\ImageUploadTestDirectiveView.html" />
     <Content Include="UploadBinaryDataToSharePoint\UploadTestPage.html" />
@@ -30,6 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="BinarySearchWithGenerics\BinSearchController.ts" />
+    <TypeScriptCompile Include="BinarySearchWithGenerics\BinSearchDirective.ts" />
+    <TypeScriptCompile Include="BinarySearchWithGenerics\BinSearchService.ts" />
     <TypeScriptCompile Include="Interfaces\SharePointJSOM\ISharePointJsomErrorResponse.ts" />
     <TypeScriptCompile Include="MMS\MMSService.ts" />
     <TypeScriptCompile Include="REST\SharePointRestUtilityService.ts" />
