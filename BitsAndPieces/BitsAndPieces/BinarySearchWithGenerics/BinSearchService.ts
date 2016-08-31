@@ -66,9 +66,9 @@
 
             this._numericData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-            const firstNames =     ["David",                            "Kelly",   "Aidan",    "Paul", "person a", "person b", "person c", "person d", "person e", "person f", "person g", "person h", "person i", "person j", "person k", "person l"];
+            const firstNames =     ["David",                            "Kelly",   "Aidan",    "Paul",   "person a", "person b", "person c", "person d", "person e", "person f", "person g", "person h", "person i", "person j", "person k", "person l"];
             const lastNames =      ["DaLoser",                          "Devlin",  "Galvin",   "Galvin", "zz1", "zz2" , "zz3", "zz4", "zz5", "zz6", "zz7", "zz8", "zz9", "zz10", "zz11", "zz12"];
-            const coolnessFactor = ["Not cool, not even a little bit.", "Awesome", "The Best", "Cool", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh"];
+            const coolnessFactor = ["Not cool, not even a little bit.", "Awesome", "The Best", "Cool",   "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh", "meh"];
 
             this._someUsers = firstNames.map((aFirstName, index) => {
                 return new CoolnessProfile(lastNames[index], firstNames[index], coolnessFactor[index]);
@@ -82,9 +82,7 @@
 
             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach((aSearchitem) => {
                 this.$log.debug(`BinSearchService: Searching for a term: ${aSearchitem}, got a result: ${
-                    this._doSearchLambda<number>(
-                        this._numericData,
-                        aSearchitem,
+                    this._doSearchLambda<number>(this._numericData, aSearchitem,
                         (lhs: number, rhs: number) => {
                             return lhs - rhs;
                         })}.`);
@@ -113,13 +111,15 @@
                 }
             ];
 
-            //searchKeys.forEach((aKey) => {
-            //    this.$log.debug("Searching for key:", aKey);
-            //    const result = this._doSearchGeneric(this._someUsers, aKey);
-            //    this.$log.debug(result ? result : "Not found!");
-            //});
+            this.$log.debug("***************************** Inefficient searching:");
 
-            this.$log.debug("More efficient searching.");
+            searchKeys.forEach((aKey) => {
+                this.$log.debug("Searching for key:", aKey);
+                const result = this._doSearchGeneric(this._someUsers, aKey);
+                this.$log.debug(result ? result : "Not found!");
+            });
+
+            this.$log.debug("***************************** More efficient searching.");
 
             searchKeys.forEach((aKey) => {
                 this.$log.debug("Searching for key:", aKey);
@@ -129,10 +129,10 @@
 
             //this.$log.debug("More efficient searching using ugly code.");
 
-            this.$log.debug("*********************** UGLY SEARCH ************************");
+            this.$log.debug("***************************** Compacted code ************************");
             searchKeys.forEach((aKey) => {
                 this.$log.debug("Searching for key:", aKey);
-                const result = this._compactBinarySearch(this._someUsers, aKey);
+                const result = this._compactGenericBinarySearch(this._someUsers, aKey);
                 this.$log.debug(result ? result : "Not found!");
             });
 
@@ -206,7 +206,7 @@
 
         }
         
-        private _compactBinarySearch<T extends IBinarySearchable, U extends ISearchKey>
+        private _compactGenericBinarySearch<T extends IBinarySearchable, U extends ISearchKey>
             (sortedSearchData: T[], searchingFor: U, leftBracketIndex?: number, rightBracketIndex?: number): T {
             
             if (isNaN(leftBracketIndex)) {
@@ -221,8 +221,8 @@
 
             return candidateItem.IsEqualTo(searchingFor) ? candidateItem :
                 (rightBracketIndex === leftBracketIndex ? null : (
-                    candidateItem.IsGreaterThan(searchingFor) ? this._compactBinarySearch(sortedSearchData, searchingFor, leftBracketIndex, currentIndex - 1) :
-                        this._compactBinarySearch(sortedSearchData, searchingFor, currentIndex + 1, rightBracketIndex)));
+                    candidateItem.IsGreaterThan(searchingFor) ? this._compactGenericBinarySearch(sortedSearchData, searchingFor, leftBracketIndex, currentIndex - 1) :
+                        this._compactGenericBinarySearch(sortedSearchData, searchingFor, currentIndex + 1, rightBracketIndex)));
         }
 
         private _doSearchLambda<T>(searchData: T[], searchFor: T, compareFunc: (lhs: T, rhs: T) => number) {

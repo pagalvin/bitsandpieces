@@ -76,22 +76,23 @@ var Nivlag;
                         LastName: "zz6"
                     }
                 ];
-                //searchKeys.forEach((aKey) => {
-                //    this.$log.debug("Searching for key:", aKey);
-                //    const result = this._doSearchGeneric(this._someUsers, aKey);
-                //    this.$log.debug(result ? result : "Not found!");
-                //});
-                this.$log.debug("More efficient searching.");
+                this.$log.debug("***************************** Inefficient searching:");
+                searchKeys.forEach(function (aKey) {
+                    _this.$log.debug("Searching for key:", aKey);
+                    var result = _this._doSearchGeneric(_this._someUsers, aKey);
+                    _this.$log.debug(result ? result : "Not found!");
+                });
+                this.$log.debug("***************************** More efficient searching.");
                 searchKeys.forEach(function (aKey) {
                     _this.$log.debug("Searching for key:", aKey);
                     var result = _this._doSearchGenericMoreEfficiently(_this._someUsers, aKey);
                     _this.$log.debug(result ? result : "Not found!");
                 });
                 //this.$log.debug("More efficient searching using ugly code.");
-                this.$log.debug("*********************** UGLY SEARCH ************************");
+                this.$log.debug("***************************** Compacted code ************************");
                 searchKeys.forEach(function (aKey) {
                     _this.$log.debug("Searching for key:", aKey);
-                    var result = _this._compactBinarySearch(_this._someUsers, aKey);
+                    var result = _this._compactGenericBinarySearch(_this._someUsers, aKey);
                     _this.$log.debug(result ? result : "Not found!");
                 });
             };
@@ -142,7 +143,7 @@ var Nivlag;
                     return this._doSearchGenericMoreEfficiently(sortedSearchData, searchingFor, leftBracketIndex, rightBracketIndex);
                 }
             };
-            BinSearchService.prototype._compactBinarySearch = function (sortedSearchData, searchingFor, leftBracketIndex, rightBracketIndex) {
+            BinSearchService.prototype._compactGenericBinarySearch = function (sortedSearchData, searchingFor, leftBracketIndex, rightBracketIndex) {
                 if (isNaN(leftBracketIndex)) {
                     leftBracketIndex = 0;
                     rightBracketIndex = sortedSearchData.length - 1;
@@ -151,8 +152,8 @@ var Nivlag;
                 var currentIndex = Math.floor((rightBracketIndex - leftBracketIndex) / 2) + leftBracketIndex;
                 var candidateItem = sortedSearchData[currentIndex];
                 return candidateItem.IsEqualTo(searchingFor) ? candidateItem :
-                    (rightBracketIndex === leftBracketIndex ? null : (candidateItem.IsGreaterThan(searchingFor) ? this._compactBinarySearch(sortedSearchData, searchingFor, leftBracketIndex, currentIndex - 1) :
-                        this._compactBinarySearch(sortedSearchData, searchingFor, currentIndex + 1, rightBracketIndex)));
+                    (rightBracketIndex === leftBracketIndex ? null : (candidateItem.IsGreaterThan(searchingFor) ? this._compactGenericBinarySearch(sortedSearchData, searchingFor, leftBracketIndex, currentIndex - 1) :
+                        this._compactGenericBinarySearch(sortedSearchData, searchingFor, currentIndex + 1, rightBracketIndex)));
             };
             BinSearchService.prototype._doSearchLambda = function (searchData, searchFor, compareFunc) {
                 var currentIndex = Math.floor(searchData.length / 2);
